@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="001" author="Me">
+    <createTable tableName="author">
+      <column name="id" type="bigint">
+        <constraints primaryKey="true" primaryKeyName="author_pk"/>
+      </column>
+      <column name="family_name" type="text"/>
+      <column name="first_name" type="text"/>
+      <column name="second_name" type="text"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="002" author="Me">
+    <preConditions>
+      <tableExists tableName="book"/>
+    </preConditions>
+    <dropTable tableName="book"/>
+  </changeSet>
+
+  <changeSet id="003" author="Me">
+    <preConditions>
+      <not><tableExists tableName="book"/></not>
+    </preConditions>
+    <createTable tableName="book">
+      <column name="id" type="bigint">
+        <constraints primaryKey="true" primaryKeyName="book_pk"/>
+      </column>
+      <column name="name" type="text">
+        <constraints nullable="false"/>
+      </column>
+      <column name="author_id" type="bigint">
+        <constraints nullable="false" referencedTableName="author" referencedColumnNames="id" foreignKeyName="book_author_fk"/>
+      </column>
+      <column name="num_pages" type="int"/>
+      <column name="year" type="int"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="004" author="Me">
+    <createSequence sequenceName="seq_author" startValue="2"/>
+    <createSequence sequenceName="seq_book" startValue="2"/>
+  </changeSet>
+
+</databaseChangeLog>
